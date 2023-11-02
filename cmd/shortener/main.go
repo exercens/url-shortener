@@ -60,7 +60,7 @@ func apiCreate(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	body := string(b)
-	if !isValidUrl(body) {
+	if !isValidURL(body) {
 		log.Println("Bad Request: invalid url:", body)
 		res.WriteHeader(http.StatusBadRequest)
 		return
@@ -73,7 +73,7 @@ func apiCreate(res http.ResponseWriter, req *http.Request) {
 
 func apiGet(res http.ResponseWriter, req *http.Request) {
 	id := strings.TrimPrefix(req.URL.Path, "/")
-	if !isValidId(id) {
+	if !isValidID(id) {
 		log.Println("Bad Request: invalid id:", req.URL.Path)
 		res.WriteHeader(http.StatusBadRequest)
 		return
@@ -88,7 +88,7 @@ func apiGet(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func isValidUrl(str string) bool {
+func isValidURL(str string) bool {
 	u, err := url.Parse(str)
 	return err == nil && (u.Scheme == "http" || u.Scheme == "https") && u.Host != ""
 }
@@ -97,7 +97,7 @@ func isAlphaNumeric(c rune) bool {
 	return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9')
 }
 
-func isValidId(s string) bool {
+func isValidID(s string) bool {
 	if len(s) == 0 {
 		return false
 	}
