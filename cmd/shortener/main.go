@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/big"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 )
 
@@ -15,7 +15,7 @@ var shortBase = "http://localhost:8080"
 type redirects struct {
 	data    map[string]string
 	revdata map[string]string
-	lastid  int
+	lastid  int64
 }
 
 var db redirects
@@ -40,7 +40,7 @@ func (r *redirects) create(url string) string {
 		return id
 	}
 	r.lastid++
-	id := strconv.Itoa(r.lastid)
+	id := big.NewInt(r.lastid).Text(62)
 	r.data[id] = url
 	r.revdata[url] = id
 	log.Printf("New URL with id %s: %s\n", id, url)
@@ -124,6 +124,7 @@ func (h MyHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	log.Println("Starting...")
 	var h MyHandler
 	err := http.ListenAndServe(`:8080`, h)
 	if err != nil {
